@@ -180,6 +180,16 @@ document.addEventListener('keydown', e => {
   else if (e.key === 'ArrowRight') pick('right');
 });
 
+function sizeCards() {
+  const cards = document.querySelectorAll('.card');
+  const measure = cards[0];
+  cards.forEach(c => { c.style.width = 'auto'; c.style.height = 'auto'; });
+  let maxW = 0, maxH = 0;
+  BOOKS.forEach(b => { measure.textContent = b; maxW = Math.max(maxW, measure.offsetWidth); maxH = Math.max(maxH, measure.offsetHeight); });
+  cards.forEach(c => { c.style.width = maxW + 'px'; c.style.height = maxH + 'px'; });
+}
+
+sizeCards();
 render();
 </script>
 </body>
