@@ -60,12 +60,12 @@
 </div>
 <div id="quiz">
   <div>
-    <div class="card" id="left" ontouchend="pick('left')" onclick="pick('left')"></div>
+    <div class="card" id="left" onclick="pick('left')"></div>
     <div class="arrow">◀ earlier</div>
   </div>
   <span id="vs">vs</span>
   <div>
-    <div class="card" id="right" ontouchend="pick('right')" onclick="pick('right')"></div>
+    <div class="card" id="right" onclick="pick('right')"></div>
     <div class="arrow">earlier ▶</div>
   </div>
 </div>
@@ -171,6 +171,7 @@ function pick(side) {
 let startX = 0;
 document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
 document.addEventListener('touchend', e => {
+  if (e.target.closest('.card')) return;
   const dx = e.changedTouches[0].clientX - startX;
   if (Math.abs(dx) > 50) pick(dx < 0 ? 'left' : 'right');
 });
