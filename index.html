@@ -216,45 +216,47 @@ setTimeout(render, 300);
 }
 let startX = 0;
 const DRAG_THRESHOLD = 60;
-function setupDrag(cardEl, side) {
-let dragging = false, sx = 0;
-const validDir = side === 'left' ? 1 : -1; // left card drags right, right card drags left
-cardEl.addEventListener('touchstart', e => {
-if (locked) return;
+(function setupDrag() {
+let dragging = false, sx = 0, maxDrag = 0, activeCard = null, activeSide = null;
+document.addEventListener('pointerdown', e => {
+if (locked || e.target.closest('#header') || e.target.closest('#overlay')) return;
 e.preventDefault();
-sx = e.touches[0].clientX;
+sx = e.clientX;
 dragging = true;
-cardEl.classList.add('dragging');
-}, {passive: false});
-cardEl.addEventListener('touchmove', e => {
+activeCard = null;
+activeSide = null;
+});
+document.addEventListener('pointermove', e => {
 if (!dragging) return;
-e.preventDefault();
-let dx = e.touches[0].clientX - sx;
-// only allow dragging toward center
+let dx = e.clientX - sx;
+if (!activeCard && Math.abs(dx) > 5) {
+// first significant move determines which card
+if (dx > 0) { activeSide = 'left'; activeCard = document.getElementById('left'); }
+else { activeSide = 'right'; activeCard = document.getElementById('right'); }
+const rect = activeCard.getBoundingClientRect();
+const center = window.innerWidth / 2;
+maxDrag = Math.abs(center - (rect.left + rect.width / 2));
+activeCard.classList.add('dragging');
+}
+if (!activeCard) return;
+const validDir = activeSide === 'left' ? 1 : -1;
 if (dx * validDir < 0) dx = 0;
-cardEl.style.transform = `translateX(${dx}px)`;
-cardEl.classList.toggle('selected', Math.abs(dx) >= DRAG_THRESHOLD);
-}, {passive: false});
-cardEl.addEventListener('touchend', e => {
+if (Math.abs(dx) > maxDrag) dx = validDir * maxDrag;
+activeCard.style.transform = `translateX(${dx}px)`;
+activeCard.classList.toggle('selected', maxDrag > 0 && Math.abs(dx) >= maxDrag - 5);
+});
+document.addEventListener('pointerup', e => {
 if (!dragging) return;
 dragging = false;
-cardEl.classList.remove('dragging', 'selected');
-const dx = e.changedTouches[0].clientX - sx;
-if (dx * validDir >= DRAG_THRESHOLD) {
-cardEl.style.transform = '';
-pick(side);
-} else {
-cardEl.style.transform = '';
-}
+if (!activeCard) return;
+const validDir = activeSide === 'left' ? 1 : -1;
+const dx = e.clientX - sx;
+activeCard.classList.remove('dragging', 'selected');
+activeCard.style.transform = '';
+if (dx * validDir >= DRAG_THRESHOLD) pick(activeSide);
+activeCard = null;
 });
-cardEl.addEventListener('touchcancel', () => {
-dragging = false;
-cardEl.classList.remove('dragging', 'selected');
-cardEl.style.transform = '';
-});
-}
-setupDrag(document.getElementById('left'), 'left');
-setupDrag(document.getElementById('right'), 'right');
+})();
 document.addEventListener('keydown', e => {
 if (e.key === 'ArrowLeft') pick('left');
 else if (e.key === 'ArrowRight') pick('right');
