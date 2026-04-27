@@ -8,188 +8,230 @@
 <link rel="apple-touch-icon" href="icon.png">
 <title>Bible Order Quiz</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Inter', -apple-system, system-ui, sans-serif; background: #0f0f1a;
-    color: #e0e0e0; display: flex; flex-direction: column; align-items: center;
-    justify-content: center; height: 100dvh; overflow: hidden; user-select: none; }
-  body::before { content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
-    background: radial-gradient(ellipse at 30% 20%, rgba(99,102,241,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(168,85,247,0.06) 0%, transparent 50%);
-    pointer-events: none; }
-
-  #header { position: absolute; top: 0; width: 100%; padding: 20px 16px 8px; text-align: center; }
-  #title { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: #6366f1; font-weight: 700; margin-bottom: 8px; }
-  #score { font-size: 28px; font-weight: 700; color: #fff; }
-  #score span { color: #6366f1; }
-  #review { font-size: 12px; color: #555; margin-top: 4px; }
-  #best { font-size: 11px; color: #6366f1; margin-top: 6px; letter-spacing: 0.5px; }
-  #last-result { margin-top: 10px; font-size: 15px; font-weight: 600; min-height: 22px;
-    padding: 4px 14px; border-radius: 20px; display: inline-block; }
-  .correct { color: #4ade80; background: rgba(74,222,128,0.1); }
-  .wrong { color: #f87171; background: rgba(248,113,113,0.1); }
-
-  #quiz { display: flex; gap: 20px; align-items: center; justify-content: center;
-    width: 100%; padding: 0 20px; position: relative; z-index: 1; }
-  .card { background: linear-gradient(145deg, #1e1e38, #16162b); border: 1px solid rgba(99,102,241,0.15);
-    border-radius: 20px; padding: 32px 12px; flex: 1; max-width: 170px; display: flex; align-items: center; justify-content: center; text-align: center;
-    font-size: 17px; font-weight: 600; line-height: 1.3; cursor: pointer;
-    transition: all 0.15s ease; box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
-  .card:active { transform: scale(0.93); background: linear-gradient(145deg, #2a2a4a, #1e1e38);
-    border-color: rgba(99,102,241,0.4); box-shadow: 0 0 20px rgba(99,102,241,0.15); }
-  @media (hover: hover) {
-    .card:hover { border-color: rgba(99,102,241,0.35); transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.4), 0 0 20px rgba(99,102,241,0.1); }
-  }
-  #vs { font-size: 12px; color: #333; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
-
-  .arrow { font-size: 11px; color: #444; margin-top: 8px; }
-  #hint { margin-top: 32px; font-size: 13px; color: #444; letter-spacing: 0.5px; }
-
-  .flash { animation: flash 0.3s ease; }
-  @keyframes flash { 0% { opacity: 0; transform: translateY(-4px); } 100% { opacity: 1; transform: translateY(0); } }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', -apple-system, system-ui, sans-serif; background: #0f0f1a;
+color: #e0e0e0; display: flex; flex-direction: column; align-items: center;
+justify-content: center; height: 100dvh; overflow: hidden; user-select: none; }
+body::before { content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+background: radial-gradient(ellipse at 30% 20%, rgba(99,102,241,0.08) 0%, transparent 50%),
+radial-gradient(ellipse at 70% 80%, rgba(168,85,247,0.06) 0%, transparent 50%);
+pointer-events: none; }
+#header { position: absolute; top: 0; width: 100%; padding: 20px 16px 8px; text-align: center; }
+#title { font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: #6366f1; font-weight: 700; margin-bottom: 8px; }
+#score { font-size: 28px; font-weight: 700; color: #fff; }
+#score span { color: #6366f1; }
+#review { font-size: 12px; color: #555; margin-top: 4px; }
+#best { font-size: 11px; color: #6366f1; margin-top: 6px; letter-spacing: 0.5px; }
+#last-result { margin-top: 10px; font-size: 15px; font-weight: 600; min-height: 22px;
+padding: 4px 14px; border-radius: 20px; display: inline-block; }
+.correct { color: #4ade80; background: rgba(74,222,128,0.1); }
+.wrong { color: #f87171; background: rgba(248,113,113,0.1); }
+#quiz { display: flex; gap: 20px; align-items: center; justify-content: center;
+width: 100%; padding: 0 20px; position: relative; z-index: 1; }
+.card { background: linear-gradient(145deg, #1e1e38, #16162b); border: 1px solid rgba(99,102,241,0.15);
+border-radius: 20px; padding: 36px 16px; max-width: 170px; text-align: center;
+font-size: 17px; font-weight: 600; line-height: 1.3; cursor: pointer;
+transition: all 0.15s ease; box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+.card:active { transform: scale(0.93); background: linear-gradient(145deg, #2a2a4a, #1e1e38);
+border-color: rgba(99,102,241,0.4); box-shadow: 0 0 20px rgba(99,102,241,0.15); }
+@media (hover: hover) {
+.card:hover { border-color: rgba(99,102,241,0.35); transform: translateY(-2px);
+box-shadow: 0 8px 30px rgba(0,0,0,0.4), 0 0 20px rgba(99,102,241,0.1); }
+}
+#vs { font-size: 12px; color: #333; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+.arrow { font-size: 11px; color: #444; margin-top: 8px; }
+#hint { margin-top: 32px; font-size: 13px; color: #444; letter-spacing: 0.5px; }
+.flash { animation: flash 0.3s ease; }
+@keyframes flash { 0% { opacity: 0; transform: translateY(-4px); } 100% { opacity: 1; transform: translateY(0); } }
+#mode-bar { display: flex; gap: 8px; margin-top: 12px; justify-content: center; flex-wrap: wrap; }
+#mode-bar button { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.25);
+color: #aaa; font-family: inherit; font-size: 12px; font-weight: 600; padding: 6px 14px;
+border-radius: 20px; cursor: pointer; transition: all 0.15s; }
+#mode-bar button.active { background: rgba(99,102,241,0.25); color: #fff; border-color: #6366f1; }
+#overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+z-index: 10; overflow-y: auto; padding: 40px 20px; }
+#overlay .close { position: fixed; top: 12px; right: 16px; font-size: 28px; color: #888;
+cursor: pointer; z-index: 11; }
+#overlay h2 { text-align: center; font-size: 14px; text-transform: uppercase;
+letter-spacing: 2px; color: #6366f1; margin-bottom: 16px; }
+#overlay ul { max-width: 320px; margin: 0 auto; padding-left: 0; list-style: none; }
+#overlay li { padding: 4px 0; font-size: 15px; color: #ccc; }
+#overlay li.nt-start { margin-top: 12px; border-top: 1px solid rgba(99,102,241,0.3); padding-top: 12px; }
 </style>
 </head>
 <body>
 <div id="header">
-  <div id="title">Bible Order Quiz</div>
-  <div id="score"></div>
-  <div id="review"></div>
-  <div id="best"></div>
-  <div id="last-result"></div>
+<div id="title">Bible Order Quiz</div>
+<div id="score"></div>
+<div id="review"></div>
+<div id="best"></div>
+<div id="last-result"></div>
+<div id="mode-bar">
+<button class="active" onclick="setMode('all')">All</button>
+<button onclick="setMode('ot')">Old Testament</button>
+<button onclick="setMode('nt')">New Testament</button>
+<button onclick="showList()">📖 View List</button>
 </div>
+</div>
+<div id="overlay"><span class="close" onclick="hideList()">✕</span><h2>Books of the Bible</h2><ul id="book-list"></ul></div>
 <div id="quiz">
-  <div>
-    <div class="card" id="left" onclick="pick('left')"></div>
-    <div class="arrow">◀ earlier</div>
-  </div>
-  <span id="vs">vs</span>
-  <div>
-    <div class="card" id="right" onclick="pick('right')"></div>
-    <div class="arrow">earlier ▶</div>
-  </div>
+<div>
+<div class="card" id="left" onclick="pick('left')"></div>
+<div class="arrow">◀ earlier</div>
+</div>
+<span id="vs">vs</span>
+<div>
+<div class="card" id="right" onclick="pick('right')"></div>
+<div class="arrow">earlier ▶</div>
+</div>
 </div>
 <div id="hint">tap the book that comes first</div>
 <script>
 const BOOKS = [
-  "Genesis","Exodus","Leviticus","Numbers","Deuteronomy",
-  "Joshua","Judges","Ruth","1 Samuel","2 Samuel",
-  "1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra",
-  "Nehemiah","Esther","Job","Psalms","Proverbs",
-  "Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations",
-  "Ezekiel","Daniel","Hosea","Joel","Amos",
-  "Obadiah","Jonah","Micah","Nahum","Habakkuk",
-  "Zephaniah","Haggai","Zechariah","Malachi",
-  "Matthew","Mark","Luke","John","Acts",
-  "Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians",
-  "Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy",
-  "2 Timothy","Titus","Philemon","Hebrews","James",
-  "1 Peter","2 Peter","1 John","2 John","3 John",
-  "Jude","Revelation"
+"Genesis","Exodus","Leviticus","Numbers","Deuteronomy",
+"Joshua","Judges","Ruth","1 Samuel","2 Samuel",
+"1 Kings","2 Kings","1 Chronicles","2 Chronicles","Ezra",
+"Nehemiah","Esther","Job","Psalms","Proverbs",
+"Ecclesiastes","Song of Solomon","Isaiah","Jeremiah","Lamentations",
+"Ezekiel","Daniel","Hosea","Joel","Amos",
+"Obadiah","Jonah","Micah","Nahum","Habakkuk",
+"Zephaniah","Haggai","Zechariah","Malachi",
+"Matthew","Mark","Luke","John","Acts",
+"Romans","1 Corinthians","2 Corinthians","Galatians","Ephesians",
+"Philippians","Colossians","1 Thessalonians","2 Thessalonians","1 Timothy",
+"2 Timothy","Titus","Philemon","Hebrews","James",
+"1 Peter","2 Peter","1 John","2 John","3 John",
+"Jude","Revelation"
 ];
-
-const DELAY = 5, MAX_STREAK = 3;
+const DELAY = 5, MAX_STREAK = 3, NT_START = 39;
+let mode = 'all';
+function activeBooks() {
+if (mode === 'ot') return BOOKS.slice(0, NT_START);
+if (mode === 'nt') return BOOKS.slice(NT_START);
+return BOOKS;
+}
+function setMode(m) {
+mode = m;
+document.querySelectorAll('#mode-bar button').forEach((b, i) => {
+b.classList.toggle('active', i === ['all','ot','nt'].indexOf(m));
+});
+review = {}; streak = {}; total = 0; correct = 0; curStreak = 0;
+loadBests();
+document.getElementById('last-result').textContent = '';
+document.getElementById('last-result').className = '';
+render();
+}
+function showList() {
+const ol = document.getElementById('book-list');
+ol.innerHTML = BOOKS.map((b, i) =>
+`<li${i === NT_START ? ' class="nt-start"' : ''}>${b}</li>`).join('');
+document.getElementById('overlay').style.display = 'block';
+review = {}; streak = {}; total = 0; correct = 0; curStreak = 0;
+document.getElementById('last-result').textContent = '';
+document.getElementById('last-result').className = '';
+render();
+}
+function hideList() { document.getElementById('overlay').style.display = 'none'; }
 let review = {}, streak = {}, total = 0, correct = 0;
 let earlier, later, leftBook, rightBook, locked = false;
-let curStreak = 0, bestStreak = +(localStorage.getItem('bestStreak') || 0);
-let bestPct = +(localStorage.getItem('bestPct') || 0);
-
+let curStreak = 0, bestStreak = 0, bestPct = 0;
+function lsKey(k) { return k + '_' + mode; }
+function loadBests() {
+bestStreak = +(localStorage.getItem(lsKey('bestStreak')) || 0);
+bestPct = +(localStorage.getItem(lsKey('bestPct')) || 0);
+}
 function key(a, b) { return a + '|' + b; }
-
 function pickPair() {
-  for (const k in review) {
-    if (review[k] <= 0) { const [a, b] = k.split('|'); return [a, b]; }
-  }
-  const idxs = [];
-  while (idxs.length < 2) {
-    const i = Math.floor(Math.random() * BOOKS.length);
-    if (!idxs.includes(i)) idxs.push(i);
-  }
-  idxs.sort((a, b) => a - b);
-  return [BOOKS[idxs[0]], BOOKS[idxs[1]]];
+const books = activeBooks();
+for (const k in review) {
+if (review[k] <= 0) { const [a, b] = k.split('|'); return [a, b]; }
 }
-
+const idxs = [];
+while (idxs.length < 2) {
+const i = Math.floor(Math.random() * books.length);
+if (!idxs.includes(i)) idxs.push(i);
+}
+idxs.sort((a, b) => a - b);
+return [books[idxs[0]], books[idxs[1]]];
+}
 function tickCooldowns() {
-  for (const k in review) review[k] = Math.max(0, review[k] - 1);
+for (const k in review) review[k] = Math.max(0, review[k] - 1);
 }
-
 function render() {
-  [earlier, later] = pickPair();
-  if (Math.random() < 0.5) { leftBook = earlier; rightBook = later; }
-  else { leftBook = later; rightBook = earlier; }
-  document.getElementById('left').textContent = leftBook;
-  document.getElementById('right').textContent = rightBook;
-  const scoreEl = document.getElementById('score');
-  if (total) {
-    scoreEl.textContent = '';
-    scoreEl.innerHTML = `${correct}<span>/${total}</span> <span style="font-size:16px;color:#888">${Math.round(correct/total*100)}%</span>`;
-    const n = Object.keys(review).length;
-    document.getElementById('review').textContent = n ? `${n} in review` : '';
-  } else {
-    scoreEl.textContent = '';
-  }
-  const parts = [];
-  if (bestPct > 0) parts.push(`Best: ${bestPct}%`);
-  if (bestStreak > 0) parts.push(`🔥 ${bestStreak} streak`);
-  document.getElementById('best').textContent = parts.join('  ·  ');
-  locked = false;
+[earlier, later] = pickPair();
+if (Math.random() < 0.5) { leftBook = earlier; rightBook = later; }
+else { leftBook = later; rightBook = earlier; }
+document.getElementById('left').textContent = leftBook;
+document.getElementById('right').textContent = rightBook;
+const scoreEl = document.getElementById('score');
+if (total) {
+scoreEl.textContent = '';
+scoreEl.innerHTML = `${correct}<span>/${total}</span> <span style="font-size:16px;color:#888">${Math.round(correct/total*100)}%</span>`;
+const n = Object.keys(review).length;
+document.getElementById('review').textContent = n ? `${n} in review` : '';
+} else {
+scoreEl.textContent = '';
 }
-
+const parts = [];
+if (bestPct > 0) parts.push(`Best: ${bestPct}%`);
+if (bestStreak > 0) parts.push(`🔥 ${bestStreak} streak`);
+document.getElementById('best').textContent = parts.join(' · ');
+locked = false;
+}
 function pick(side) {
-  if (locked) return;
-  locked = true;
-  const chosen = side === 'left' ? leftBook : rightBook;
-  const k = key(earlier, later);
-  total++;
-  const el = document.getElementById('last-result');
-  if (chosen === earlier) {
-    correct++;
-    curStreak++;
-    el.className = 'correct flash';
-    el.textContent = `✓ ${earlier} → ${later}`;
-    if (k in review) {
-      streak[k] = (streak[k] || 0) + 1;
-      if (streak[k] >= MAX_STREAK) { delete review[k]; delete streak[k]; }
-      else review[k] = DELAY;
-    }
-    if (curStreak > bestStreak) { bestStreak = curStreak; localStorage.setItem('bestStreak', bestStreak); }
-    if (total >= 10) {
-      const pct = Math.round(correct / total * 100);
-      if (pct > bestPct) { bestPct = pct; localStorage.setItem('bestPct', bestPct); }
-    }
-  } else {
-    curStreak = 0;
-    el.className = 'wrong flash';
-    el.textContent = `✗ ${earlier} → ${later}`;
-    review[k] = DELAY;
-    streak[k] = 0;
-  }
-  tickCooldowns();
-  render()
+if (locked) return;
+locked = true;
+const chosen = side === 'left' ? leftBook : rightBook;
+const k = key(earlier, later);
+total++;
+const el = document.getElementById('last-result');
+if (chosen === earlier) {
+correct++;
+curStreak++;
+el.className = 'correct flash';
+el.textContent = `✓ ${earlier} → ${later}`;
+if (k in review) {
+streak[k] = (streak[k] || 0) + 1;
+if (streak[k] >= MAX_STREAK) { delete review[k]; delete streak[k]; }
+else review[k] = DELAY;
 }
-
+if (curStreak > bestStreak) { bestStreak = curStreak; localStorage.setItem(lsKey('bestStreak'), bestStreak); }
+if (total >= 10) {
+const pct = Math.round(correct / total * 100);
+if (pct > bestPct) { bestPct = pct; localStorage.setItem(lsKey('bestPct'), bestPct); }
+}
+} else {
+curStreak = 0;
+el.className = 'wrong flash';
+el.textContent = `✗ ${earlier} → ${later}`;
+review[k] = DELAY;
+streak[k] = 0;
+}
+tickCooldowns();
+setTimeout(render, 300);
+}
 let startX = 0;
 document.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
 document.addEventListener('touchend', e => {
-  if (e.target.closest('.card')) return;
-  const dx = e.changedTouches[0].clientX - startX;
-  if (Math.abs(dx) > 50) pick(dx < 0 ? 'left' : 'right');
+if (e.target.closest('.card')) return;
+const dx = e.changedTouches[0].clientX - startX;
+if (Math.abs(dx) > 50) pick(dx < 0 ? 'left' : 'right');
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowLeft') pick('left');
-  else if (e.key === 'ArrowRight') pick('right');
+if (e.key === 'ArrowLeft') pick('left');
+else if (e.key === 'ArrowRight') pick('right');
 });
-
 function sizeCards() {
-  const cards = document.querySelectorAll('.card');
-  const measure = cards[0];
-  cards.forEach(c => { c.style.width = 'auto'; c.style.height = 'auto'; });
-  let maxW = 0, maxH = 0;
-  BOOKS.forEach(b => { measure.textContent = b; maxW = Math.max(maxW, measure.offsetWidth); maxH = Math.max(maxH, measure.offsetHeight); });
-  cards.forEach(c => { c.style.width = maxW + 'px'; c.style.height = maxH + 'px'; });
+const cards = document.querySelectorAll('.card');
+const measure = cards[0];
+cards.forEach(c => { c.style.width = 'auto'; c.style.height = 'auto'; });
+let maxW = 0, maxH = 0;
+BOOKS.forEach(b => { measure.textContent = b; maxW = Math.max(maxW, measure.offsetWidth); maxH = Math.max(maxH, measure.offsetHeight); });
+cards.forEach(c => { c.style.width = maxW + 'px'; c.style.height = maxH + 'px'; });
 }
-
 sizeCards();
+loadBests();
 render();
 </script>
 </body>
