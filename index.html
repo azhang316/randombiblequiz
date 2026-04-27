@@ -36,7 +36,7 @@ transition: all 0.15s ease; box-shadow: 0 4px 24px rgba(0,0,0,0.3);
 touch-action: none; }
 .card.dragging { transition: none; }
 .card.selected { border-color: rgba(99,102,241,0.6); box-shadow: 0 0 24px rgba(99,102,241,0.3); }
-.card:active { transform: scale(0.93); background: linear-gradient(145deg, #2a2a4a, #1e1e38);
+.card:active { background: linear-gradient(145deg, #2a2a4a, #1e1e38);
 border-color: rgba(99,102,241,0.4); box-shadow: 0 0 20px rgba(99,102,241,0.15); }
 @media (hover: hover) {
 .card:hover { border-color: rgba(99,102,241,0.35); transform: translateY(-2px);
@@ -221,18 +221,20 @@ let dragging = false, sx = 0;
 const validDir = side === 'left' ? 1 : -1; // left card drags right, right card drags left
 cardEl.addEventListener('touchstart', e => {
 if (locked) return;
+e.preventDefault();
 sx = e.touches[0].clientX;
 dragging = true;
 cardEl.classList.add('dragging');
-});
+}, {passive: false});
 cardEl.addEventListener('touchmove', e => {
 if (!dragging) return;
+e.preventDefault();
 let dx = e.touches[0].clientX - sx;
 // only allow dragging toward center
 if (dx * validDir < 0) dx = 0;
 cardEl.style.transform = `translateX(${dx}px)`;
 cardEl.classList.toggle('selected', Math.abs(dx) >= DRAG_THRESHOLD);
-});
+}, {passive: false});
 cardEl.addEventListener('touchend', e => {
 if (!dragging) return;
 dragging = false;
