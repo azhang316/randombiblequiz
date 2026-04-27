@@ -243,7 +243,9 @@ const validDir = activeSide === 'left' ? 1 : -1;
 if (dx * validDir < 0) dx = 0;
 if (Math.abs(dx) > maxDrag) dx = validDir * maxDrag;
 activeCard.style.transform = `translateX(${dx}px)`;
-activeCard.classList.toggle('selected', maxDrag > 0 && Math.abs(dx) >= maxDrag - 5);
+const atCenter = maxDrag > 0 && Math.abs(dx) >= maxDrag - 5;
+activeCard.classList.toggle('selected', atCenter);
+if (atCenter) activeCard.style.transform = `translateX(${dx}px) scale(1.08)`;
 });
 document.addEventListener('pointerup', e => {
 if (!dragging) return;
